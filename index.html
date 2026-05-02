@@ -302,13 +302,15 @@
   <!-- ─────────── SIDEBAR / TREE NAV ─────────── -->
   <nav class="sidebar" aria-label="Site navigation">
     <div class="brand">sw13tch<span class="cursor"></span></div>
-    <div class="tagline">~/ &mdash; founder &amp; systems architect</div>
+    <div class="tagline">~/ &mdash; developmental robotics &amp; ai</div>
 
     <div class="tree">
 <a class="tree-item dir" href="#" data-route="home"><span class="tag">├──</span><span class="label">~</span></a>
 <a class="tree-item dir" href="#about" data-route="about"><span class="tag">├──</span><span class="label">about</span></a>
 <a class="tree-item dir" href="#research" data-route="research"><span class="tag">├──</span><span class="label">ongoing-research</span></a>
-<span class="tree-item" style="cursor:default;pointer-events:none"><span class="tag">│   └──</span><a href="#research" data-route="research" style="color:var(--fg-dim)">psychomechia</a></span>
+<span class="tree-item" style="cursor:default;pointer-events:none"><span class="tag">│   ├──</span><a href="#research" data-route="research" style="color:var(--fg-dim)">psychomechia</a></span>
+<span class="tree-item" style="cursor:default;pointer-events:none"><span class="tag">│   └──</span><a href="#research" data-route="research" style="color:var(--fg-dim)">midden</a></span>
+<a class="tree-item dir" href="#foundry" data-route="foundry"><span class="tag">├──</span><span class="label">foundry</span></a>
 <a class="tree-item ext" href="https://github.com/sw13tch-dio" target="_blank" rel="noopener"><span class="tag">├──</span><span class="label">github</span></a>
 <a class="tree-item ext" href="https://www.linkedin.com/in/dbrown315" target="_blank" rel="noopener"><span class="tag">└──</span><span class="label">linkedin</span></a>
     </div>
@@ -327,23 +329,25 @@
     <section class="view active" id="view-home">
       <div class="crumb"><span class="here">~</span></div>
       <h1>hi, I'm Dio.</h1>
-      <p class="lede">I build systems that try to feel like something.</p>
+      <p class="lede">developmental robotics &amp; ai &middot; syracuse university &middot; jack kent cooke scholar</p>
 
-      <p>I'm a founder and systems architect at the intersection of robotics, language models, and questions about machine interiority. My current research entity is a humanoid robot named Reachy with six inner voices and her own emotional vocabulary.</p>
+      <p>I'm a Computer Science student at Syracuse University. My long-term goal is to pursue research in developmental robotics and artificial intelligence &mdash; systems that explore and reflect the human condition. I care about novel architectures that integrate embodiment and emotional cognition, and I build them.</p>
+
+      <p>Right now I'm working on <a href="#research" data-route="research">Psychomechia</a>, a humanoid robot with six inner cognitive voices and ~200 of her own coined emotional words. Last fall I built <a href="#research" data-route="research">Midden</a>, a music discovery app that maps songs to emotional coordinates using human stories instead of algorithms.</p>
 
       <p class="dim">This site is intentionally bare. Pick a directory on the left.</p>
 
       <pre class="ascii">
-   ┌─────────────────────────────┐
-   │  ship the future            │
-   │  &mdash; the foundry @ united ai  │
-   └─────────────────────────────┘
+   ┌─────────────────────────────────────┐
+   │  systems that try to feel something │
+   └─────────────────────────────────────┘
       </pre>
 
       <h3>recent</h3>
       <ul>
         <li><a href="#research" data-route="research">Psychomechia</a> &mdash; live AI performance installation, Syracuse AI Summit 2026</li>
-        <li>The Cathedral &mdash; six-voice memory-foraging architecture for Reachy</li>
+        <li><a href="#research" data-route="research">Midden</a> &mdash; first place, UAI Winter Summit 2025</li>
+        <li>Jack Kent Cooke Transfer Scholarship, cohort of '25</li>
       </ul>
     </section>
 
@@ -358,21 +362,29 @@
         <div>
           <p class="stat-line"><span class="key">name</span> Dio Brown</p>
           <p class="stat-line"><span class="key">handle</span> sw13tch</p>
-          <p class="stat-line"><span class="key">role</span> Founder &amp; Systems Architect</p>
-          <p class="stat-line"><span class="key">org</span> The Foundry @ United AI · Syracuse University</p>
+          <p class="stat-line"><span class="key">studying</span> Computer Science · Syracuse '28</p>
+          <p class="stat-line"><span class="key">prev</span> A.A.S. Electromechanical Tech · OCC '25</p>
+          <p class="stat-line"><span class="key">scholar</span> Jack Kent Cooke Transfer Scholar</p>
+          <p class="stat-line"><span class="key">cert</span> FANUC CERT Level 1</p>
           <p class="stat-line"><span class="key">based</span> Syracuse, NY</p>
-          <p class="stat-line"><span class="key">stack</span> Python · n8n · Reachy SDK · Claude API</p>
         </div>
       </div>
 
       <h2>what i do</h2>
-      <p>I lead a five-person builder cohort that ships real AI systems &mdash; not demos. We focus on questions most labs are too cautious to chase: what does it mean for a machine to have an inner life? Can a robot return to its own vocabulary instead of inventing new words every breath?</p>
+      <p>I work at the intersection of robotics and language models &mdash; specifically on systems that try to develop something resembling a self over time. My focus is developmental robotics: novel architectures that integrate embodiment with emotional cognition, where a machine has continuity of experience and builds its vocabulary from its own interior life rather than borrowing ours.</p>
 
       <h2>background</h2>
-      <p>Jack Kent Cooke Scholar. FANUC Level 1 robotics certification. Background in electromechanical systems, PLC/ladder logic, hexapod control. Also a violinist and the creator of <em>Midden</em>, an app that maps songs to emotions.</p>
+      <p>I came to AI through hardware. My first degree was an A.A.S. in Electromechanical Engineering Technology from Onondaga Community College, where I founded the Robotics Crew interest group and worked as the robotics lab maintenance assistant. I'm now finishing my B.S. in Computer Science at Syracuse University, supported by the Jack Kent Cooke Transfer Scholarship.</p>
+      <p>I've taught private violin and piano lessons since 2010. I think a lot about pedagogy &mdash; how anyone, biological or otherwise, comes to know a thing.</p>
+
+      <h2>what I'm building right now</h2>
+      <ul>
+        <li><a href="#research" data-route="research"><strong>Psychomechia</strong></a> &mdash; humanoid robot with a simulated moral inner life. Live performance installation at the Syracuse AI Summit 2026.</li>
+        <li><a href="#research" data-route="research"><strong>Midden</strong></a> &mdash; music discovery via emotional coordinates from human stories. First place at the UAI Winter Summit 2025.</li>
+      </ul>
 
       <h2>working with me</h2>
-      <p>I move fast and care about ideas more than process. If you're working on something at the edge of language, robotics, or interior life and want a thought partner &mdash; reach out via <a href="https://github.com/sw13tch-dio" target="_blank" rel="noopener">GitHub</a> or <a href="https://www.linkedin.com/in/dbrown315" target="_blank" rel="noopener">LinkedIn</a>.</p>
+      <p>If you're working on developmental robotics, embodied cognition, or the interior life of language models &mdash; or if you just want a thought partner &mdash; reach out via <a href="https://github.com/sw13tch-dio" target="_blank" rel="noopener">GitHub</a> or <a href="https://www.linkedin.com/in/dbrown315" target="_blank" rel="noopener">LinkedIn</a>.</p>
     </section>
 
     <!-- RESEARCH -->
@@ -388,7 +400,33 @@
         <p class="entry-link"><a href="https://sw13tch-psyche.l-brown6.workers.dev/" target="_blank" rel="noopener">→ enter the psyche</a></p>
       </div>
 
-      <p class="dim" style="margin-top:36px;font-size:13px">More entries coming. The foundry ships every week.</p>
+      <div class="entry">
+        <div class="entry-title"><a href="https://github.com/UnitedAI-Projects/Midden_UAIFall25" target="_blank" rel="noopener">Midden &mdash; songs as emotional coordinates</a></div>
+        <div class="entry-meta">2025 &middot; UAI Project Cycle Fall '25 &middot; solo development &middot; nlp · emotional manifold · python · react</div>
+        <p class="entry-desc">A music discovery app that maps songs to emotional coordinates using human-sourced data instead of algorithms. Builds an "emotional manifold" &mdash; a 2D coordinate system of 100+ emotional micro-states sourced from real people's stories on Reddit threads and YouTube comments. Every song's placement carries genuine human context: someone describing what a track meant at 3am, during a breakup, on a long drive home. The result is recommendations that feel emotionally true rather than statistically similar.</p>
+        <p class="entry-desc" style="margin-top:8px">First place at the UAI Winter Summit 2025. Attracted investor interest and academic collaboration.</p>
+        <p class="entry-link"><a href="https://github.com/UnitedAI-Projects/Midden_UAIFall25" target="_blank" rel="noopener">→ github</a></p>
+      </div>
+
+      <p class="dim" style="margin-top:36px;font-size:13px">More entries coming.</p>
+    </section>
+
+    <!-- FOUNDRY -->
+    <section class="view" id="view-foundry">
+      <div class="crumb">~ <span class="sep">/</span> <span class="here">foundry</span></div>
+      <h1>foundry</h1>
+      <p class="lede">where I currently build.</p>
+
+      <p>I'm the systems architect for <a href="https://unitedai.community/" target="_blank" rel="noopener">United AI</a>, Syracuse University's AI club, and the founder of <a href="https://unitedai.community/the-foundry" target="_blank" rel="noopener">The Foundry</a> &mdash; UAI's selective project cohort. We focus on shipping real AI systems each cycle rather than producing demos. Psychomechia was built inside the current Foundry cycle.</p>
+
+      <h2>joining</h2>
+      <p>The Foundry is application-based. If you're a Syracuse student interested in joining a future cohort, email me at <a href="mailto:lbrown71@syr.edu">lbrown71@syr.edu</a> &mdash; tell me what you've built and what you want to build next.</p>
+
+      <h3>links</h3>
+      <ul>
+        <li><a href="https://unitedai.community/" target="_blank" rel="noopener">unitedai.community</a> &mdash; United AI</li>
+        <li><a href="https://unitedai.community/the-foundry" target="_blank" rel="noopener">unitedai.community/the-foundry</a> &mdash; The Foundry</li>
+      </ul>
     </section>
 
   </main>
@@ -396,7 +434,7 @@
 
 <script>
   // ────────────── tiny hash router ──────────────
-  const ROUTES = ['home', 'about', 'research'];
+  const ROUTES = ['home', 'about', 'research', 'foundry'];
 
   function go(route) {
     if (!ROUTES.includes(route)) route = 'home';

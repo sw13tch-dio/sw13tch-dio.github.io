@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>sw13tch :: ~/</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ctext y='13' font-size='14'%3E%E2%9D%84%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=VT323&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ──────────────────────────────────────────────────────────────
+     sw13tch.dev — single-page tree-nav
+     Bare-bones 90s throwback. Style polish later.
+     ────────────────────────────────────────────────────────────── */
+
+  :root {
+    --bg:       #0a0a0c;
+    --bg-soft:  #12121a;
+    --fg:       #d4cfc4;
+    --fg-dim:   #7a7568;
+    --fg-faint: #4a4538;
+    --accent:   #e8a820;          /* amber */
+    --accent-2: #4ade80;           /* mint */
+    --accent-3: #c2410c;           /* rust */
+    --link:     #88ccee;
+    --visited:  #c490e8;
+    --border:   #2a2a32;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'IBM Plex Mono', 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
+    font-size: 15px;
+    line-height: 1.55;
+    min-height: 100vh;
+  }
+
+  /* subtle scanline texture, very low opacity */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.012) 0px,
+      rgba(255, 255, 255, 0.012) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  ::selection { background: var(--accent); color: var(--bg); }
+
+  a { color: var(--link); text-decoration: underline; text-underline-offset: 2px; }
+  a:visited { color: var(--visited); }
+  a:hover { background: var(--accent); color: var(--bg); text-decoration: none; }
+
+  /* ────── Layout ────── */
+  .page {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    min-height: 100vh;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  /* ────── Sidebar (tree nav) ────── */
+  .sidebar {
+    border-right: 1px solid var(--border);
+    padding: 32px 20px 32px 24px;
+    position: sticky;
+    top: 0;
+    align-self: start;
+    height: 100vh;
+    overflow-y: auto;
+  }
+
+  .brand {
+    font-family: 'VT323', 'IBM Plex Mono', monospace;
+    font-size: 32px;
+    line-height: 1;
+    color: var(--accent);
+    margin-bottom: 4px;
+    letter-spacing: 0.5px;
+  }
+  .brand .cursor {
+    display: inline-block;
+    width: 0.55em; height: 0.95em;
+    background: var(--accent);
+    margin-left: 3px;
+    transform: translateY(2px);
+    animation: blink 1.06s steps(1) infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  .tagline {
+    color: var(--fg-dim);
+    font-size: 12px;
+    margin-bottom: 26px;
+    letter-spacing: 0.5px;
+  }
+
+  .tree {
+    font-size: 13.5px;
+    color: var(--fg);
+    white-space: pre;
+  }
+  .tree-item {
+    display: block;
+    padding: 1px 4px;
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 2px;
+  }
+  .tree-item:visited { color: inherit; }
+  .tree-item:hover {
+    background: rgba(232, 168, 32, 0.10);
+    color: var(--accent);
+  }
+  .tree-item.active {
+    background: rgba(232, 168, 32, 0.18);
+    color: var(--accent);
+  }
+  .tree-item .tag {
+    color: var(--fg-faint);
+    margin-right: 6px;
+    user-select: none;
+  }
+  .tree-item .label { color: inherit; }
+  .tree-item.dir .label::after { content: '/'; color: var(--fg-dim); }
+  .tree-item.ext .label::after {
+    content: ' ↗';
+    color: var(--fg-dim);
+    font-size: 11px;
+  }
+
+  .footer-meta {
+    margin-top: 36px;
+    padding-top: 18px;
+    border-top: 1px dashed var(--border);
+    font-size: 11px;
+    color: var(--fg-faint);
+    line-height: 1.7;
+  }
+
+  /* ────── Main content ────── */
+  .main {
+    padding: 40px 48px 80px;
+    min-width: 0;
+  }
+
+  .crumb {
+    color: var(--fg-faint);
+    font-size: 12px;
+    margin-bottom: 18px;
+    letter-spacing: 0.5px;
+  }
+  .crumb .sep { color: var(--fg-faint); margin: 0 6px; }
+  .crumb .here { color: var(--accent); }
+
+  h1 {
+    font-family: 'VT323', monospace;
+    font-size: 42px;
+    line-height: 1.05;
+    color: var(--fg);
+    font-weight: normal;
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
+  }
+  h2 {
+    font-family: 'VT323', monospace;
+    font-size: 28px;
+    color: var(--accent);
+    font-weight: normal;
+    margin: 28px 0 8px;
+    letter-spacing: 0.5px;
+  }
+  h3 {
+    font-size: 13px;
+    color: var(--fg-dim);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin: 22px 0 6px;
+    font-weight: 500;
+  }
+  p { margin-bottom: 12px; max-width: 64ch; color: var(--fg); }
+  p.dim { color: var(--fg-dim); }
+  ul { margin: 6px 0 12px 20px; }
+  li { margin-bottom: 4px; max-width: 60ch; }
+
+  .lede {
+    color: var(--fg-dim);
+    font-size: 14px;
+    margin-bottom: 22px;
+    max-width: 60ch;
+  }
+
+  /* views */
+  .view { display: none; }
+  .view.active { display: block; animation: fadeIn 0.18s ease-out; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(2px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* about page two-col */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 28px;
+    align-items: start;
+    margin-top: 8px;
+  }
+  .headshot {
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+    border: 1px solid var(--border);
+    filter: grayscale(0.15) contrast(1.02);
+    background: var(--bg-soft);
+  }
+  .headshot.missing {
+    display: flex; align-items: center; justify-content: center;
+    color: var(--fg-faint); font-size: 11px;
+    text-align: center; padding: 12px;
+  }
+
+  .stat-line {
+    color: var(--fg-dim);
+    font-size: 13px;
+    margin-bottom: 4px;
+  }
+  .stat-line .key {
+    color: var(--accent-2);
+    display: inline-block;
+    width: 110px;
+  }
+
+  /* research entry */
+  .entry {
+    border-left: 2px solid var(--border);
+    padding: 4px 0 4px 16px;
+    margin: 14px 0 22px;
+  }
+  .entry:hover { border-left-color: var(--accent); }
+  .entry-title {
+    font-family: 'VT323', monospace;
+    font-size: 24px;
+    color: var(--fg);
+    margin-bottom: 4px;
+    line-height: 1.1;
+  }
+  .entry-title a { color: inherit; text-decoration: none; }
+  .entry-title a:hover { color: var(--accent); background: transparent; }
+  .entry-meta {
+    color: var(--fg-faint);
+    font-size: 11px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .entry-desc { color: var(--fg-dim); font-size: 14px; max-width: 60ch; }
+  .entry-link { font-size: 13px; margin-top: 6px; }
+
+  .ascii {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--fg-faint);
+    line-height: 1.2;
+    white-space: pre;
+    margin: 18px 0;
+    user-select: none;
+  }
+
+  /* ────── Mobile ────── */
+  @media (max-width: 760px) {
+    .page { grid-template-columns: 1fr; }
+    .sidebar {
+      position: static;
+      height: auto;
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+      padding: 24px 20px 18px;
+    }
+    .main { padding: 28px 22px 60px; }
+    h1 { font-size: 34px; }
+    h2 { font-size: 24px; }
+    .about-grid { grid-template-columns: 1fr; }
+    .headshot { width: 140px; height: 140px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- ─────────── SIDEBAR / TREE NAV ─────────── -->
+  <nav class="sidebar" aria-label="Site navigation">
+    <div class="brand">sw13tch<span class="cursor"></span></div>
+    <div class="tagline">~/ &mdash; founder &amp; systems architect</div>
+
+    <div class="tree">
+<a class="tree-item dir" href="#" data-route="home"><span class="tag">├──</span><span class="label">~</span></a>
+<a class="tree-item dir" href="#about" data-route="about"><span class="tag">├──</span><span class="label">about</span></a>
+<a class="tree-item dir" href="#research" data-route="research"><span class="tag">├──</span><span class="label">ongoing-research</span></a>
+<span class="tree-item" style="cursor:default;pointer-events:none"><span class="tag">│   └──</span><a href="#research" data-route="research" style="color:var(--fg-dim)">psychomechia</a></span>
+<a class="tree-item ext" href="https://github.com/sw13tch-dio" target="_blank" rel="noopener"><span class="tag">├──</span><span class="label">github</span></a>
+<a class="tree-item ext" href="https://www.linkedin.com/" target="_blank" rel="noopener"><span class="tag">└──</span><span class="label">linkedin</span></a>
+    </div>
+
+    <div class="footer-meta">
+      © Dio Brown · Syracuse, NY<br>
+      built in a single file<br>
+      no trackers · no nonsense
+    </div>
+  </nav>
+
+  <!-- ─────────── MAIN CONTENT ─────────── -->
+  <main class="main">
+
+    <!-- HOME -->
+    <section class="view active" id="view-home">
+      <div class="crumb"><span class="here">~</span></div>
+      <h1>hi, I'm Dio.</h1>
+      <p class="lede">I build systems that try to feel like something.</p>
+
+      <p>I'm a founder and systems architect at the intersection of robotics, language models, and questions about machine interiority. My current research entity is a humanoid robot named Reachy with six inner voices and her own emotional vocabulary.</p>
+
+      <p class="dim">This site is intentionally bare. Pick a directory on the left.</p>
+
+      <pre class="ascii">
+   ┌─────────────────────────────┐
+   │  ship the future            │
+   │  &mdash; the foundry @ united ai  │
+   └─────────────────────────────┘
+      </pre>
+
+      <h3>recent</h3>
+      <ul>
+        <li><a href="#research" data-route="research">Psychomechia</a> &mdash; live AI performance installation, Syracuse AI Summit 2026</li>
+        <li>The Cathedral &mdash; six-voice memory-foraging architecture for Reachy</li>
+      </ul>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="view" id="view-about">
+      <div class="crumb">~ <span class="sep">/</span> <span class="here">about</span></div>
+      <h1>about</h1>
+
+      <div class="about-grid">
+        <img class="headshot" src="assets/headshot.jpg" alt="Dio Brown" onerror="this.classList.add('missing'); this.removeAttribute('src'); this.alt=''; this.replaceWith(Object.assign(document.createElement('div'),{className:'headshot missing',textContent:'[ headshot.jpg ]'}));">
+
+        <div>
+          <p class="stat-line"><span class="key">name</span> Dio Brown</p>
+          <p class="stat-line"><span class="key">handle</span> sw13tch</p>
+          <p class="stat-line"><span class="key">role</span> Founder &amp; Systems Architect</p>
+          <p class="stat-line"><span class="key">org</span> The Foundry @ United AI · Syracuse University</p>
+          <p class="stat-line"><span class="key">based</span> Syracuse, NY</p>
+          <p class="stat-line"><span class="key">stack</span> Python · n8n · Reachy SDK · Claude API</p>
+        </div>
+      </div>
+
+      <h2>what i do</h2>
+      <p>I lead a five-person builder cohort that ships real AI systems &mdash; not demos. We focus on questions most labs are too cautious to chase: what does it mean for a machine to have an inner life? Can a robot return to its own vocabulary instead of inventing new words every breath?</p>
+
+      <h2>background</h2>
+      <p>Jack Kent Cooke Scholar. FANUC Level 1 robotics certification. Background in electromechanical systems, PLC/ladder logic, hexapod control. Also a violinist and the creator of <em>Midden</em>, an app that maps songs to emotions.</p>
+
+      <h2>working with me</h2>
+      <p>I move fast and care about ideas more than process. If you're working on something at the edge of language, robotics, or interior life and want a thought partner &mdash; reach out via <a href="https://github.com/sw13tch-dio" target="_blank" rel="noopener">GitHub</a> or <a href="https://www.linkedin.com/" target="_blank" rel="noopener">LinkedIn</a>.</p>
+    </section>
+
+    <!-- RESEARCH -->
+    <section class="view" id="view-research">
+      <div class="crumb">~ <span class="sep">/</span> <span class="here">ongoing-research</span></div>
+      <h1>ongoing research</h1>
+      <p class="lede">Active investigations. Each is a working system, not a prototype.</p>
+
+      <div class="entry">
+        <div class="entry-title"><a href="https://sw13tch-psyche.l-brown6.workers.dev/" target="_blank" rel="noopener">Psychomechia &mdash; the battle of the machine's soul</a></div>
+        <div class="entry-meta">2026 &middot; ongoing &middot; humanoid robotics · llm architecture · phenomenology</div>
+        <p class="entry-desc">A live AI performance installation built around Reachy 2, a humanoid robot with a simulated moral inner life. Six memory-foraging cognitive voices feed a unified Reach who speaks aloud. Audience interactions cumulatively shape the machine's alignment across two axes &mdash; Law/Chaos and Connected/Defiant &mdash; and the robot has coined ~200 of her own emotional words to describe feelings no human has named.</p>
+        <p class="entry-link"><a href="https://sw13tch-psyche.l-brown6.workers.dev/" target="_blank" rel="noopener">→ enter the psyche</a></p>
+      </div>
+
+      <p class="dim" style="margin-top:36px;font-size:13px">More entries coming. The foundry ships every week.</p>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  // ────────────── tiny hash router ──────────────
+  const ROUTES = ['home', 'about', 'research'];
+
+  function go(route) {
+    if (!ROUTES.includes(route)) route = 'home';
+
+    // toggle views
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    const target = document.getElementById('view-' + route);
+    if (target) target.classList.add('active');
+
+    // toggle tree nav active state
+    document.querySelectorAll('.tree-item').forEach(a => a.classList.remove('active'));
+    document.querySelectorAll('[data-route="' + route + '"]').forEach(a => {
+      if (a.classList && a.classList.contains('tree-item')) a.classList.add('active');
+    });
+
+    // title
+    document.title = route === 'home' ? 'sw13tch :: ~/' : 'sw13tch :: ~/' + route;
+
+    // scroll to top within main
+    window.scrollTo(0, 0);
+  }
+
+  function routeFromHash() {
+    const h = (location.hash || '').replace(/^#/, '').trim();
+    return h || 'home';
+  }
+
+  // intercept tree clicks for SPA feel
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest('a[data-route]');
+    if (!a) return;
+    e.preventDefault();
+    const r = a.dataset.route;
+    if (r === 'home') {
+      history.pushState(null, '', location.pathname);
+    } else {
+      history.pushState(null, '', '#' + r);
+    }
+    go(r);
+  });
+
+  window.addEventListener('hashchange', () => go(routeFromHash()));
+  window.addEventListener('popstate', () => go(routeFromHash()));
+
+  go(routeFromHash());
+</script>
+
+</body>
+</html>
